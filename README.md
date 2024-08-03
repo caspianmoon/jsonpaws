@@ -14,7 +14,7 @@
 Install jsonpaws using pip:
 
 ```
-pip install jsonpaws
+pip install json_paws
 ```
 
 ## Usage
