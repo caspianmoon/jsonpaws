@@ -13,4 +13,11 @@ jsonpaws is a Python library for generating structured and consistent JSON outpu
 Install jsonpaws with pip:
 
 ```bash
-pip install json_gpt
+pip install jsonpaws
+
+Usage
+Getting Started
+To use jsonpaws, you'll need to have an OpenAI API key. You can set it as an environment variable or pass it directly to the library.
+
+Setting the API Key
+You can set the API key as an environment variable:
