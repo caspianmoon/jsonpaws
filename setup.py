@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='json_paws',
-    version='0.1.8',  # Use your local version or decide based on requirements
+    version='0.1.9',  # Use your local version or decide based on requirements
     description='A library for generating structured JSON using GPT-4o.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
