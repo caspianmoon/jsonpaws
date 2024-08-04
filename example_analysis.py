@@ -2,33 +2,33 @@ import json
 from jsonpaws import JSONSchemaParser, PromptGenerator, ContentGenerator, JSONProcessor
 
 # Set your OpenAI API key here
-api_key = "OPENAI-API-KEY"
+api_key = 'OPENAI-API-KEY'
 
 # Define the JSON schema
 json_schema = {
-    "type": "object",
-    "properties": {
-        "report_date": {"type": "string"},
-        "patients": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "id": {"type": "string"},
-                    "firstName": {"type": "string"},
-                    "lastName": {"type": "string"},
-                    "age": {"type": "number", "minimum": 0, "maximum": 120},
-                    "gender": {"type": "string", "enum": ["male", "female"]},
-                    "diagnosis": {"type": "string"},
-                    "medications": {
-                        "type": "array",
-                        "items": {"type": "string"}
+        "type": "object",
+        "properties": {
+            "report_date": {"type": "string"},
+            "patients": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id": {"type": "string"},
+                        "firstName": {"type": "string"},
+                        "lastName": {"type": "string"},
+                        "age": {"type": "number", "minimum": 0, "maximum": 120},
+                        "gender": {"type": "string", "enum": ["male", "female"]},
+                        "diagnosis": {"type": "string"},
+                        "medications": {
+                            "type": "array",
+                            "items": {"type": "string"}
+                        }
                     }
                 }
             }
         }
     }
-}
 
 # Initialize the schema parser
 schema_parser = JSONSchemaParser(json_schema)
@@ -42,7 +42,7 @@ Another patient, Jane Smith, a 30-year-old female, has been diagnosed with diabe
 The list also includes Sam Brown, a 60-year-old male suffering from arthritis, for which he is taking ibuprofen and methotrexate.
 """
 prompt_generator_analysis = PromptGenerator(mode='analysis')
-content_generator_analysis = ContentGenerator(api_key=api_key, model='gpt-4o', mode='analysis', instructions=instructions)
+content_generator_analysis = ContentGenerator(api_key=api_key, model='gpt-4o-mini', mode='analysis', instructions=instructions)
 analysis_processor = JSONProcessor(schema_parser, prompt_generator_analysis, content_generator_analysis, mode='analysis')
 
 # Process the data

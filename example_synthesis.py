@@ -2,7 +2,7 @@ import json
 from jsonpaws import JSONSchemaParser, PromptGenerator, ContentGenerator, JSONProcessor
 
 # Set your OpenAI API key here
-api_key = "OPENAI-API-KEY"
+api_key = 'OPENAI-API-KEY'
 
 # Define the JSON schema
 json_schema = {

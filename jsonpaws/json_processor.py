@@ -40,21 +40,13 @@ class JSONProcessor:
         elif self.mode == 'image':
             if image_url is None:
                 raise ValueError("Image URL must be provided for image mode")
-            return self.assemble_json(instructions, schema, image_url=image_url)
+            return self.content_generator.generate_content(
+                instructions=instructions,
+                json_schema=schema,
+                image_url=image_url,
+            )
 
     def assemble_json(self, instructions, schema, properties=None, image_url=None):
-        """
-        Assemble the JSON output based on instructions and schema properties.
-
-        Args:
-            instructions (str): Instructions for processing the data.
-            schema (dict): JSON schema for analyzing data.
-            properties (dict): The properties from the JSON schema.
-            image_url (str): URL of the image for analysis in image mode.
-
-        Returns:
-            dict: Generated JSON data.
-        """
         if properties is None:
             properties = self.schema_parser.parse()
 
@@ -74,7 +66,6 @@ class JSONProcessor:
                 content = self.content_generator.generate_content(
                     instructions=instructions,
                     json_schema=schema,
-                    expected_type=field_type,
                     field_name=field_name,
                     field_info=field_info,
                     image_url=image_url
@@ -95,7 +86,6 @@ class JSONProcessor:
                 content = self.content_generator.generate_content(
                     instructions=instructions,
                     json_schema=schema,
-                    expected_type=field_type,
                     field_name=field_name,
                     field_info=field_info,
                     image_url=image_url
@@ -103,6 +93,7 @@ class JSONProcessor:
                 generated_json[field_name] = content
 
         return generated_json
+
 
     def generate_synthetic_json(self, schema):
         """
@@ -119,7 +110,12 @@ class JSONProcessor:
 
         for field_name, field_info in properties.items():
             prompt = self.prompt_generator.generate_prompt(field_name, field_info)
-            content = self.content_generator.generate_content(prompt, schema)
+            content = self.content_generator.generate_content(
+                instructions=prompt,
+                json_schema=schema,
+                field_name=field_name,
+                field_info=field_info
+            )
             generated_json[field_name] = content
 
         return generated_json
