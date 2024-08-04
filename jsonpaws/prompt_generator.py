@@ -1,15 +1,15 @@
 class PromptGenerator:
-    """Generates prompts for GPT-4 based on the JSON schema, with modes for analysis and synthesis."""
+    """Generates prompts for GPT-4 based on the JSON schema, with modes for analysis, synthesis, and image analysis."""
 
     def __init__(self, mode='analysis'):
         """
         Initialize the PromptGenerator with a specific mode.
         
         Args:
-            mode (str): Mode of prompt generation. Either 'analysis' or 'synthesis'.
+            mode (str): Mode of prompt generation. Either 'analysis', 'synthesis', or 'image'.
         """
-        if mode not in ['analysis', 'synthesis']:
-            raise ValueError("Mode must be either 'analysis' or 'synthesis'")
+        if mode not in ['analysis', 'synthesis', 'image']:
+            raise ValueError("Mode must be either 'analysis', 'synthesis', or 'image'")
         self.mode = mode
 
     def generate_prompt(self, field_name, field_info):
@@ -19,6 +19,9 @@ class PromptGenerator:
 
         if self.mode == 'synthesis':
             return self.generate_synthesis_prompt(field_name, field_info)
+
+        if self.mode == 'image':
+            return self.generate_image_analysis_prompt(field_name, field_info)
 
         # Analysis prompt generation
         if enum_values:
@@ -63,3 +66,27 @@ class PromptGenerator:
             return f"Generate realistic values for fields within the '{field_name}' object."
         
         return f"Generate a realistic value for '{field_name}'."
+
+    def generate_image_analysis_prompt(self, field_name, field_info):
+        """Generate an image analysis prompt for analyzing image content."""
+        field_type = field_info.get('type')
+        enum_values = field_info.get('enum')
+
+        # Construct the prompt for image analysis
+        if enum_values:
+            choices = ', '.join(enum_values)
+            return f"Identify and describe one of the following for '{field_name}' in the image: {choices}."
+
+        # Detailed instructions for different field types in image analysis
+        if field_type == "object":
+            return f"Identify and describe the components of the '{field_name}' in the image, detailing each part."
+        elif field_type == "array":
+            return f"List and describe the array of objects or elements for '{field_name}' visible in the image."
+        elif field_type == "string":
+            return f"Extract and describe the text or label '{field_name}' found within the image."
+        elif field_type == "number":
+            return f"Measure and report any numeric value or quantity associated with '{field_name}' visible in the image."
+        elif field_type == "boolean":
+            return f"Determine the presence or absence of '{field_name}' in the image, indicating true or false."
+        
+        return f"Analyze and describe any relevant information for '{field_name}' from the image."
